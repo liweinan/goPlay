@@ -59,7 +59,18 @@ func main() {
 	go opFile(resp)
 
 	println("resp: ", <-resp)
+
+	playSlices()
+
 	println("main exit")
+}
+
+// https://medium.com/@tucnak/why-go-is-a-poorly-designed-language-1cc04e5daf2
+func playSlices() {
+	nums := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+	log.Println("nums: ", nums)
+	log.Println("nums[2:] ", nums[2:])
+
 }
 
 func opFile(resp chan string) {
