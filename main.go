@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"reflect"
 )
 
 type Liters float64
@@ -62,7 +63,18 @@ func main() {
 
 	playSlices()
 
+	playEmptyInterfaceAsString("strstr")
+	playEmptyInterfaceAsString("42")
+
 	println("main exit")
+}
+
+func playEmptyInterfaceAsString(incomeVal interface{}) {
+	if reflect.TypeOf(incomeVal).Kind() == reflect.String {
+		println("incomeVal: ", incomeVal.(string))
+	} else {
+		println("Not supported type!")
+	}
 }
 
 // https://medium.com/@tucnak/why-go-is-a-poorly-designed-language-1cc04e5daf2
