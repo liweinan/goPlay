@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"goPlay/server"
 	"log"
 	"os"
 	"reflect"
@@ -55,11 +56,11 @@ func main() {
 	foo()
 	bar()
 
-	resp := make(chan string)
+	resp1 := make(chan string)
 
-	go opFile(resp)
+	go opFile(resp1)
 
-	println("resp: ", <-resp)
+	println("resp: ", <-resp1)
 
 	playSlices()
 
@@ -67,6 +68,8 @@ func main() {
 	playEmptyInterfaceAsString("42")
 
 	println("main exit")
+
+	server.Serve()
 }
 
 func playEmptyInterfaceAsString(incomeVal interface{}) {
