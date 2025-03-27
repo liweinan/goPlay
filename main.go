@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"goPlay/server"
 	"gopkg.in/yaml.v3"
 	"log"
 	"os"
@@ -38,26 +37,16 @@ type Config struct {
 }
 
 func main() {
-	yamlData := `
-name: MyApp
-version: 1.0.0
-port: 8080
-debug: true
-servers:
-  - host: server1.example.com
-    port: 8000
-  - host: server2.example.com
-    port: 8001
-`
+	callYaml()
 
-	var config Config
-	err := yaml.Unmarshal([]byte(yamlData), &config)
-	if err != nil {
-		log.Fatalf("error parsing YAML: %v", err)
-	}
+	useMap()
 
-	fmt.Printf("Parsed config: %+v\n", config)
+	//all()
 
+	//server.Serve()
+}
+
+func all() {
 	s := "gopher"
 	s = "changed"
 	fmt.Printf("Hello and welcome, %s!\n", s)
@@ -108,8 +97,33 @@ servers:
 	playEmptyInterfaceAsString("42")
 
 	println("main exit")
+}
 
-	server.Serve()
+func useMap() {
+	ranks := map[string]int{"bronze": 3, "silver": 2, "gold": 1}
+	fmt.Println(ranks["gold"])
+}
+
+func callYaml() {
+	yamlData := `
+name: MyApp
+version: 1.0.0
+port: 8080
+debug: true
+servers:
+  - host: server1.example.com
+    port: 8000
+  - host: server2.example.com
+    port: 8001
+`
+
+	var config Config
+	err := yaml.Unmarshal([]byte(yamlData), &config)
+	if err != nil {
+		log.Fatalf("error parsing YAML: %v", err)
+	}
+
+	fmt.Printf("Parsed config: %+v\n", config)
 }
 
 func playEmptyInterfaceAsString(incomeVal interface{}) {
