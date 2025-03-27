@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"goPlay/server"
+	"gopkg.in/yaml.v3"
 	"log"
 	"os"
 	"reflect"
@@ -12,12 +13,51 @@ import (
 type Liters float64
 type Gallons float64
 
-//TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
-// the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
+//type Config struct {
+//	Name    string `yaml:"name"`
+//	Version string `yaml:"version"`
+//	Port    int    `yaml:"port"`
+//	Debug   bool   `yaml:"debug"`
+//	Servers []struct {
+//		Host string `yaml:"host"`
+//		Port int    `yaml:"port"`
+//	} `yaml:"servers"`
+//}
+
+type Server struct {
+	Host string `yaml:"host"`
+	Port int    `yaml:"port"`
+}
+
+type Config struct {
+	Name    string   `yaml:"name"`
+	Version string   `yaml:"version"`
+	Port    int      `yaml:"port"`
+	Debug   bool     `yaml:"debug"`
+	Servers []Server `yaml:"servers"`
+}
 
 func main() {
-	//TIP <p>Press <shortcut actionId="ShowIntentionActions"/> when your caret is at the underlined text
-	// to see how GoLand suggests fixing the warning.</p><p>Alternatively, if available, click the lightbulb to view possible fixes.</p>
+	yamlData := `
+name: MyApp
+version: 1.0.0
+port: 8080
+debug: true
+servers:
+  - host: server1.example.com
+    port: 8000
+  - host: server2.example.com
+    port: 8001
+`
+
+	var config Config
+	err := yaml.Unmarshal([]byte(yamlData), &config)
+	if err != nil {
+		log.Fatalf("error parsing YAML: %v", err)
+	}
+
+	fmt.Printf("Parsed config: %+v\n", config)
+
 	s := "gopher"
 	s = "changed"
 	fmt.Printf("Hello and welcome, %s!\n", s)
