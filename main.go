@@ -128,7 +128,11 @@ servers:
   - host: server2.example.com
     port: 8001
 `
+	// https://gosamples.dev/print-type/
 	fmt.Println(yamlData)
+	fmt.Printf("type of yamlData: %s\n", reflect.TypeOf(yamlData).Kind().String())
+	fmt.Printf("type of yamlData: %T\n", yamlData)
+
 	var config Config
 	err := yaml.Unmarshal([]byte(yamlData), &config)
 	if err != nil {
