@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"unsafe"
 )
 
 type Liters float64
@@ -41,9 +42,20 @@ func main() {
 
 	useMap()
 
+	playUnsafe()
+
 	//all()
 
 	//server.Serve()
+}
+
+// https://medium.com/lyonas/go-type-casting-starter-guide-a9c1811670c5
+func playUnsafe() {
+	var i uint64 = 10
+	var ptr *uint64
+	ptr = (*uint64)(unsafe.Pointer(&i))
+	*ptr = 20
+	fmt.Printf("sizeof i: %d", unsafe.Sizeof(i))
 }
 
 func all() {
@@ -116,7 +128,7 @@ servers:
   - host: server2.example.com
     port: 8001
 `
-
+	fmt.Println(yamlData)
 	var config Config
 	err := yaml.Unmarshal([]byte(yamlData), &config)
 	if err != nil {
