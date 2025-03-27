@@ -46,9 +46,32 @@ func main() {
 
 	playStructTags()
 
+	f := Form{Name: ""}
+	err := ValidateStruct(f) // 返回错误："Name is required"
+	println(err.Error())
 	//all()
 
 	//server.Serve()
+}
+
+type Form struct {
+	Name string `validate:"required"`
+}
+
+func ValidateStruct(s interface{}) error {
+	t := reflect.TypeOf(s)
+	v := reflect.ValueOf(s)
+
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		tag := field.Tag.Get("validate")
+		value := v.Field(i).String()
+
+		if tag == "required" && value == "" {
+			return fmt.Errorf("%s is required", field.Name)
+		}
+	}
+	return nil
 }
 
 type User struct {
