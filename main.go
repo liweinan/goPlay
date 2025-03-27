@@ -44,9 +44,30 @@ func main() {
 
 	playUnsafe()
 
+	playStructTags()
+
 	//all()
 
 	//server.Serve()
+}
+
+type User struct {
+	ID    int    `json:"id" db:"user_id"`
+	Name  string `json:"name" validate:"required"`
+	Email string `json:"email,omitempty"` // omitempty 表示零值时忽略
+}
+
+func playStructTags() {
+	u := User{}
+	t := reflect.TypeOf(u) // 获取结构体类型信息
+
+	fmt.Println("" +
+		"Struct Tags:")
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i) // 获取字段信息
+		tag := field.Tag    // 获取标签
+		fmt.Printf("Field: %s, Tag: %s\n", field.Name, tag)
+	}
 }
 
 // https://medium.com/lyonas/go-type-casting-starter-guide-a9c1811670c5
@@ -55,7 +76,7 @@ func playUnsafe() {
 	var ptr *uint64
 	ptr = (*uint64)(unsafe.Pointer(&i))
 	*ptr = 20
-	fmt.Printf("sizeof i: %d", unsafe.Sizeof(i))
+	fmt.Printf("sizeof i: %d\n", unsafe.Sizeof(i))
 }
 
 func all() {
