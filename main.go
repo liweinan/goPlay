@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"goPlay/server"
 	"gopkg.in/yaml.v3"
 	"log"
 	"os"
@@ -51,7 +52,7 @@ func main() {
 	println(err.Error())
 	//all()
 
-	//server.Serve()
+	server.Serve()
 }
 
 type Form struct {
