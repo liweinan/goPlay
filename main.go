@@ -130,14 +130,15 @@ func all() {
 
 	carFuel := Gallons(Liters(40.0) * 0.264)
 	fmt.Printf("carFule: %0.1f\n", carFuel)
-	fmt.Printf("carFule: %s\n", carFuel)
+	fmt.Printf("carFule: %v\n", carFuel)
 
 	item := Item{key: "theAnswer", val: 42}
 	item.sayHi()
 
 	var v2 NumInt
 	v2 = IntType(5)
-	fmt.Println("v2 =", v2.M1)
+	v2.M1()  // Call M1() separately since it doesn't return a value
+	fmt.Println("v2 =", v2)
 
 	foo()
 	bar()
@@ -277,5 +278,5 @@ type Item struct {
 }
 
 func (item Item) sayHi() {
-	fmt.Printf("sayHi: %s\n", item)
+	fmt.Printf("Hi from item: %v\n", item)
 }
