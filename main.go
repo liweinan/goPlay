@@ -3,8 +3,8 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"goPlay/server"
 	"gopkg.in/yaml.v3"
+	"io/fs"
 	"log"
 	"os"
 	"reflect"
@@ -39,20 +39,31 @@ type Config struct {
 }
 
 func main() {
-	callYaml()
+	root := "/tmp"
+	fileSystem := os.DirFS(root)
 
-	useMap()
+	fs.WalkDir(fileSystem, ".", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(path)
+		return nil
+	})
 
-	playUnsafe()
+	//callYaml()
 
-	playStructTags()
+	//useMap()
 
-	f := Form{Name: ""}
-	err := ValidateStruct(f) // 返回错误："Name is required"
-	println(err.Error())
+	//playUnsafe()
+
+	//playStructTags()
+
+	//f := Form{Name: ""}
+	//err := ValidateStruct(f) // 返回错误："Name is required"
+	//println(err.Error())
 	//all()
 
-	server.Serve()
+	//server.Serve()
 }
 
 type Form struct {
