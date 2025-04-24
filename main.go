@@ -39,6 +39,25 @@ type Config struct {
 }
 
 func main() {
+	walkDir()
+
+	callYaml()
+
+	useMap()
+
+	playUnsafe()
+
+	playStructTags()
+
+	f := Form{Name: ""}
+	err := ValidateStruct(f) // 返回错误："Name is required"
+	println(err.Error())
+	all()
+
+	//server.Serve()
+}
+
+func walkDir() {
 	root := "/tmp"
 	fileSystem := os.DirFS(root)
 
@@ -49,21 +68,6 @@ func main() {
 		fmt.Println(path)
 		return nil
 	})
-
-	//callYaml()
-
-	//useMap()
-
-	//playUnsafe()
-
-	//playStructTags()
-
-	//f := Form{Name: ""}
-	//err := ValidateStruct(f) // 返回错误："Name is required"
-	//println(err.Error())
-	//all()
-
-	//server.Serve()
 }
 
 type Form struct {
