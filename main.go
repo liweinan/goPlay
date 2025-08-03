@@ -39,22 +39,55 @@ type Config struct {
 }
 
 func main() {
-	walkDir()
 
-	callYaml()
+	//parseJson()
 
-	useMap()
-
-	playUnsafe()
-
-	playStructTags()
+	//walkDir()
+	//
+	//callYaml()
+	//
+	//useMap()
+	//
+	//playUnsafe()
+	//
+	//playStructTags()
 
 	f := Form{Name: ""}
 	err := ValidateStruct(f) // 返回错误："Name is required"
 	println(err.Error())
-	all()
+	//all()
 
 	//server.Serve()
+}
+
+type Pod struct {
+	APIVersion string   `json:"apiVersion"`
+	Kind       string   `json:"kind"`
+	Metadata   Metadata `json:"metadata"`
+}
+
+type Metadata struct {
+	Name      string            `json:"name"`
+	Namespace string            `json:"namespace"`
+	Labels    map[string]string `json:"labels"`
+}
+
+func parseJson() {
+	obj := map[string]interface{}{
+		"apiVersion": "v1",
+		"kind":       "Pod",
+		"metadata": map[string]interface{}{
+			"name":      "example-pod",
+			"namespace": "default",
+			"labels": map[string]interface{}{
+				"app": "example",
+			},
+		},
+	}
+
+	name := obj["metadata"].(map[string]interface{})["name"].(string)
+
+	fmt.Println(name)
 }
 
 func walkDir() {
@@ -78,7 +111,11 @@ func ValidateStruct(s interface{}) error {
 	t := reflect.TypeOf(s)
 	v := reflect.ValueOf(s)
 
+	fmt.Println("type:", t.Name())
+	fmt.Println("value:", v)
+
 	for i := 0; i < t.NumField(); i++ {
+		fmt.Printf("field:%v\n", t.Field(i))
 		field := t.Field(i)
 		tag := field.Tag.Get("validate")
 		value := v.Field(i).String()
@@ -152,7 +189,7 @@ func all() {
 
 	var v2 NumInt
 	v2 = IntType(5)
-	v2.M1()  // Call M1() separately since it doesn't return a value
+	v2.M1() // Call M1() separately since it doesn't return a value
 	fmt.Println("v2 =", v2)
 
 	foo()
