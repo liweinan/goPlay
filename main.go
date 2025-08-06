@@ -42,25 +42,25 @@ type Config struct {
 
 func main() {
 
-	playInterface()
-	fmt.Println("----------------------------------------")
-	checkInterface(42)
-	checkInterface("hello")
-	checkInterface([]int{1, 2, 3})
+	//playInterface()
+	//fmt.Println("----------------------------------------")
+	//checkInterface(42)
+	//checkInterface("hello")
+	//checkInterface([]int{1, 2, 3})
+	//
+	//// 演示类型断言的必要性
+	//fmt.Println("----------------------------------------")
+	//demonstrateTypeAssertion()
+	//
+	//// 演示各种获取类型元信息的方法
+	//fmt.Println("----------------------------------------")
+	//demonstrateTypeMetadata()
 
-	// 演示类型断言的必要性
-	fmt.Println("----------------------------------------")
-	demonstrateTypeAssertion()
-
-	// 演示各种获取类型元信息的方法
-	fmt.Println("----------------------------------------")
-	demonstrateTypeMetadata()
-
-	//parseJson()
+	parseJson()
 
 	//walkDir()
 	//
-	//callYaml()
+	callYaml()
 	//
 	//useMap()
 	//
@@ -296,7 +296,7 @@ func parseJson() {
 
 	name := obj["metadata"].(map[string]interface{})["name"].(string)
 
-	fmt.Println(name)
+	fmt.Println("NAME:", name)
 }
 
 func walkDir() {
