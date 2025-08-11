@@ -62,6 +62,10 @@ func main() {
 	//walkDir()
 	//
 	callYaml()
+
+	// 演示类型断言语法特征
+	fmt.Println("----------------------------------------")
+	demonstrateTypeAssertionSyntax()
 	//
 	//useMap()
 	//
@@ -545,6 +549,85 @@ type Item struct {
 
 func (item Item) sayHi() {
 	fmt.Printf("Hi from item: %v\n", item)
+}
+
+// demonstrateTypeAssertionSyntax 演示类型断言语法的简化示例
+func demonstrateTypeAssertionSyntax() {
+	fmt.Println("=== 类型断言语法特征演示 ===")
+
+	// 模拟原始代码中的语法特征
+	var names []string
+
+	// 创建一个包含不同类型值的切片
+	items := []interface{}{
+		"hello",
+		42,
+		"world",
+		3.14,
+		"golang",
+	}
+
+	// 使用函数字面量（匿名函数）遍历并提取字符串
+	// 这展示了原始代码的语法特征：func(n ast.Node) bool { ... }
+	processItems := func(item interface{}) bool {
+		// 类型断言的安全形式：if typeSpec, ok := n.(*ast.TypeSpec); ok { ... }
+		if str, ok := item.(string); ok {
+			// 类型断言后访问字段：typeSpec.Name.Name -> str
+			names = append(names, str)
+		}
+		return true // 返回布尔值
+	}
+
+	// 应用函数到每个元素
+	for _, item := range items {
+		processItems(item)
+	}
+
+	fmt.Printf("提取的字符串: %v\n", names)
+
+	// 更复杂的示例：处理结构体
+	type Person struct {
+		Name string
+		Age  int
+	}
+
+	type Animal struct {
+		Species string
+		Legs    int
+	}
+
+	var personNames []string
+	var animalSpecies []string
+
+	objects := []interface{}{
+		Person{Name: "Alice", Age: 30},
+		Animal{Species: "Dog", Legs: 4},
+		Person{Name: "Bob", Age: 25},
+		Animal{Species: "Cat", Legs: 4},
+		"not a struct",
+	}
+
+	// 展示更复杂的类型断言模式
+	processObjects := func(obj interface{}) bool {
+		// 类型断言到Person
+		if person, ok := obj.(Person); ok {
+			personNames = append(personNames, person.Name)
+		}
+
+		// 类型断言到Animal
+		if animal, ok := obj.(Animal); ok {
+			animalSpecies = append(animalSpecies, animal.Species)
+		}
+
+		return true
+	}
+
+	for _, obj := range objects {
+		processObjects(obj)
+	}
+
+	fmt.Printf("人员姓名: %v\n", personNames)
+	fmt.Printf("动物种类: %v\n", animalSpecies)
 }
 
 func demonstrateJsonSerialization() {
