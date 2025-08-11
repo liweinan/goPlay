@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"io/fs"
 	"log"
@@ -74,6 +75,10 @@ func main() {
 	//all()
 
 	//server.Serve()
+
+	// 添加JSON序列化和反序列化示例
+	fmt.Println("----------------------------------------")
+	demonstrateJsonSerialization()
 }
 
 func checkInterface(v interface{}) {
@@ -540,4 +545,189 @@ type Item struct {
 
 func (item Item) sayHi() {
 	fmt.Printf("Hi from item: %v\n", item)
+}
+
+func demonstrateJsonSerialization() {
+	fmt.Println("=== JSON序列化和反序列化示例 ===")
+
+	// 1. 使用嵌套的map[string]interface{}结构
+	fmt.Println("\n1. 使用嵌套的map[string]interface{}结构:")
+	obj := map[string]interface{}{
+		"apiVersion": "v1",
+		"kind":       "Pod",
+		"metadata": map[string]interface{}{
+			"name":      "example-pod",
+			"namespace": "default",
+			"labels": map[string]interface{}{
+				"app": "example",
+			},
+		},
+	}
+
+	// 序列化嵌套结构到JSON
+	objJSON, err := json.MarshalIndent(obj, "", "  ")
+	if err != nil {
+		log.Fatalf("error marshalling nested object JSON: %v", err)
+	}
+	fmt.Printf("嵌套对象序列化后的JSON:\n%s\n", objJSON)
+
+	// 反序列化JSON到嵌套结构
+	var deserializedObj map[string]interface{}
+	err = json.Unmarshal(objJSON, &deserializedObj)
+	if err != nil {
+		log.Fatalf("error unmarshalling nested object JSON: %v", err)
+	}
+	fmt.Printf("嵌套对象反序列化后的数据: %+v\n", deserializedObj)
+
+	// 访问嵌套数据
+	metadata := deserializedObj["metadata"].(map[string]interface{})
+	name := metadata["name"].(string)
+	labels := metadata["labels"].(map[string]interface{})
+	app := labels["app"].(string)
+	fmt.Printf("提取的数据 - name: %s, app: %s\n", name, app)
+
+	// 2. 使用已有的User结构体进行JSON操作
+	fmt.Println("\n2. 使用已有的User结构体:")
+	user := User{
+		ID:    1,
+		Name:  "Alice",
+		Email: "alice@example.com",
+	}
+
+	// 序列化User到JSON
+	userJSON, err := json.Marshal(user)
+	if err != nil {
+		log.Fatalf("error marshalling user JSON: %v", err)
+	}
+	fmt.Printf("User序列化后的JSON: %s\n", userJSON)
+
+	// 反序列化JSON到User
+	var deserializedUser User
+	err = json.Unmarshal(userJSON, &deserializedUser)
+	if err != nil {
+		log.Fatalf("error unmarshalling user JSON: %v", err)
+	}
+	fmt.Printf("User反序列化后的数据: %+v\n", deserializedUser)
+
+	// 3. 使用已有的Pod结构体进行JSON操作
+	fmt.Println("\n3. 使用已有的Pod结构体:")
+	pod := Pod{
+		APIVersion: "v1",
+		Kind:       "Pod",
+		Metadata: Metadata{
+			Name:      "example-pod",
+			Namespace: "default",
+			Labels: map[string]string{
+				"app":     "example",
+				"version": "1.0",
+			},
+		},
+	}
+
+	// 序列化Pod到JSON
+	podJSON, err := json.Marshal(pod)
+	if err != nil {
+		log.Fatalf("error marshalling pod JSON: %v", err)
+	}
+	fmt.Printf("Pod序列化后的JSON: %s\n", podJSON)
+
+	// 反序列化JSON到Pod
+	var deserializedPod Pod
+	err = json.Unmarshal(podJSON, &deserializedPod)
+	if err != nil {
+		log.Fatalf("error unmarshalling pod JSON: %v", err)
+	}
+	fmt.Printf("Pod反序列化后的数据: %+v\n", deserializedPod)
+
+	// 4. 复杂嵌套结构的JSON操作
+	fmt.Println("\n4. 复杂嵌套结构:")
+	complexObj := map[string]interface{}{
+		"company": "TechCorp",
+		"version": "2.0.0",
+		"config": map[string]interface{}{
+			"name":  "TechCorp App",
+			"port":  8080,
+			"debug": true,
+			"servers": []map[string]interface{}{
+				{
+					"host": "api1.techcorp.com",
+					"port": 8000,
+					"tags": []string{"primary", "production"},
+				},
+				{
+					"host": "api2.techcorp.com",
+					"port": 8001,
+					"tags": []string{"secondary", "backup"},
+				},
+			},
+		},
+		"employees": []map[string]interface{}{
+			{
+				"id":     1,
+				"name":   "Alice",
+				"email":  "alice@techcorp.com",
+				"skills": []string{"Go", "Python"},
+			},
+			{
+				"id":     2,
+				"name":   "Bob",
+				"email":  "bob@techcorp.com",
+				"skills": []string{"JavaScript", "React"},
+			},
+		},
+	}
+
+	// 序列化复杂嵌套结构到JSON
+	complexJSON, err := json.MarshalIndent(complexObj, "", "  ")
+	if err != nil {
+		log.Fatalf("error marshalling complex object JSON: %v", err)
+	}
+	fmt.Printf("复杂嵌套对象序列化后的JSON:\n%s\n", complexJSON)
+
+	// 反序列化JSON到复杂嵌套结构
+	var deserializedComplex map[string]interface{}
+	err = json.Unmarshal(complexJSON, &deserializedComplex)
+	if err != nil {
+		log.Fatalf("error unmarshalling complex object JSON: %v", err)
+	}
+
+	// 访问复杂嵌套数据
+	config := deserializedComplex["config"].(map[string]interface{})
+	servers := config["servers"].([]interface{})
+	firstServer := servers[0].(map[string]interface{})
+	serverHost := firstServer["host"].(string)
+
+	employees := deserializedComplex["employees"].([]interface{})
+	firstEmployee := employees[0].(map[string]interface{})
+	employeeName := firstEmployee["name"].(string)
+
+	fmt.Printf("提取的复杂数据 - server host: %s, employee name: %s\n", serverHost, employeeName)
+
+	// 5. 处理omitempty标签
+	fmt.Println("\n5. 处理omitempty标签:")
+	userWithEmptyEmail := User{
+		ID:   3,
+		Name: "Charlie",
+		// Email字段为零值，会被omitempty忽略
+	}
+
+	userWithEmptyJSON, err := json.Marshal(userWithEmptyEmail)
+	if err != nil {
+		log.Fatalf("error marshalling user with empty email: %v", err)
+	}
+	fmt.Printf("User with empty email JSON: %s\n", userWithEmptyJSON)
+
+	// 6. 错误处理示例
+	fmt.Println("\n6. 错误处理示例:")
+	invalidJSON := `{"name": "Invalid", "age": "not a number"}`
+
+	var invalidUser User
+	err = json.Unmarshal([]byte(invalidJSON), &invalidUser)
+	if err != nil {
+		fmt.Printf("预期的错误: %v\n", err)
+	} else {
+		fmt.Printf("意外成功解析: %+v\n", invalidUser)
+	}
+
+	fmt.Println("\n=== JSON示例完成 ===")
 }
